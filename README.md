@@ -1,59 +1,84 @@
-# 🌿 GitaMind – Wisdom from the Bhagavad Gita
+# GitaMind 🕉️
 
-A MERN-stack web application that delivers **daily wisdom from the Bhagavad Gita**, tailored to your **mood, search preferences, or saved favorites**.  
-Built with ❤️ using **MongoDB, Express.js, React.js, and Node.js**.
+GitaMind is a modern web application designed to bring the timeless wisdom of the Bhagavad Gita to users in an accessible, personal, and engaging way. This project leverages the MERN stack to create a feature-rich platform for daily inspiration and learning.
 
----
+**[Live Demo Link Here]** <!-- Add your deployed link when ready -->
 
-## ✨ Features
+## ✨ Key Features
 
-- 📖 **Verse of the Day** – Get inspired daily with a random verse.
-- 😌 **Mood-Based Wisdom** – Select a mood (Happy, Stressed, Confused, Motivated, etc.) to receive relevant verses.
-- 🔎 **Powerful Search** – Search verses by keywords like *duty, peace, devotion*.
-- ⭐ **Personal Favorites** – Save verses that resonate with you for easy access later.
-- ⚡ **Smooth Experience** – Powered by the **MERN stack**, with a responsive React frontend.
+This application is more than just a digital book. It includes a suite of features designed to create a deeply personal and interactive experience.
 
----
+*   🔐 **User Authentication:** Securely sign up, log in, and log out to access a personalized experience. All your favorites, notes, and progress are saved to your account.
 
-## 📸 Screenshots (Add Yours)
+*   🎧 **Audio Recitations:** Listen to each verse with a single click. The audio feature offers an immersive way to experience the content, catering to auditory learners.
 
-> Replace these with your actual app screenshots.
+*   ❤️ **Personal Favorites:** Bookmark any verse that resonates with you. All your saved verses are collected in a dedicated "Favorites" section for easy access.
 
-| Homepage | Mood Selection | Favorites |
-|----------|----------------|-----------|
-| ![Homepage](./screenshots/home.png) | ![Mood](./screenshots/mood.png) | ![Favorites](./screenshots/favorites.png) |
+*   🔥 **Daily Visit Streak:** Stay motivated with a streak tracker that counts your consecutive daily visits, encouraging a consistent learning habit.
 
----
+*   🧘 **Mood-Based Recommendations:** Select your current mood (e.g., "Stressed," "Motivated") and receive a curated list of verses that provide relevant wisdom for your emotional state.
 
-## 🛠️ Tech Stack
+*   📖 **Simple Explanations:** Go beyond the original text. A button reveals a short, clear explanation for each verse, making the ancient teachings accessible to a modern audience.
 
-- **Frontend:** React.js (Hooks, Axios, Context API)
-- **Backend:** Node.js + Express.js (REST API)
-- **Database:** MongoDB (with Mongoose ODM)
-- **Others:** JSON Web Tokens (JWT), bcrypt, dotenv
+*   🎨 **Dark/Light Mode:** Switch between a light or dark theme for comfortable reading in any environment. The app remembers your preference.
 
----
+*   🔗 **Related Verses:** Discover interconnected concepts within the Gita. The app automatically suggests verses with similar themes, encouraging deeper exploration.
 
-## 🔄 Flowcharts
+*   📲 **Share a Verse:** Easily share your favorite verses with friends and family via social media or messaging apps with a simple share button.
 
-### 📌 User Journey Flow
+*   ✍️ **Simple Personal Notes:** Add your own private reflections and insights to your saved verses. This simple journaling feature helps you document your spiritual journey.
 
-```mermaid
-graph TD
-    A[Start: User Visits GitaMind Website] --> B{Homepage Loads};
-    B --> C[Display "Verse of the Day"];
-    B --> D[Show Options: <br/>1. Explore by Mood<br/>2. Search<br/>3. Favorites];
+## 🛠️ Technology Stack
 
-    D --> E{User clicks 'Explore by Mood'};
-    E --> F[User Selects a Mood];
-    F --> G[Display Related Verses];
-    G --> H(User can read or favorite a verse);
+This project is built using the MERN stack, demonstrating a full-stack web development approach.
 
-    D --> I{User clicks 'Search'};
-    I --> J[User Enters a Keyword];
-    J --> K[Display All Verses Containing the Keyword];
-    K --> H;
+*   **Frontend:** React.js
+*   **Backend:** Node.js, Express.js
+*   **Database:** MongoDB
+*   **Authentication:** JWT (JSON Web Tokens)
 
-    D --> L{User clicks 'View Favorites'};
-    L --> M[Display All Saved/Favorite Verses];
-    M --> H;
+## 🚀 Getting Started
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+Make sure you have Node.js and npm installed on your machine.
+*   npm
+    ```sh
+    npm install npm@latest -g
+    ```
+
+### Installation
+
+1.  Clone the repo
+    ```sh
+    git clone https://github.com/your_username/GitaMind.git
+    ```
+2.  Navigate to the project directory
+    ```sh
+    cd GitaMind
+    ```
+3.  Install server dependencies
+    ```sh
+    cd server
+    npm install
+    ```
+4.  Install client dependencies
+    ```sh
+    cd ../client
+    npm install
+    ```
+5.  Create a `.env` file in the `server` directory and add your environment variables (e.g., `MONGO_URI`, `JWT_SECRET`).
+
+### Running the Application
+
+1.  Start the backend server (from the `/server` directory)
+    ```sh
+    npm run dev
+    ```
+2.  Start the frontend React app (from the `/client` directory)
+    ```sh
+    npm start
+    ```
+3.  Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
