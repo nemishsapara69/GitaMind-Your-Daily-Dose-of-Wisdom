@@ -1,0 +1,1 @@
+# -GitaMind---Your-Daily-Dose-of-Wisdom
