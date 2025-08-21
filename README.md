@@ -6,17 +6,19 @@ GitaMind is a modern web application designed to bring the timeless wisdom of th
 
 ## ✨ Key Features
 
-This application is more than just a digital book. It includes a suite of features designed to create a deeply personal and interactive experience.
+This application is built with a focus on user interaction and content discovery, providing multiple ways to explore the Gita's wisdom.
 
 *   🔐 **User Authentication:** Securely sign up, log in, and log out to access a personalized experience. All your favorites, notes, and progress are saved to your account.
+
+*   🔍 **Powerful Search:** Instantly find specific verses or themes by searching with keywords like "duty," "peace," or "soul."
+
+*   🧘 **Mood-Based Exploration:** Select your current mood (e.g., Motivated, Stressed, Confused) to receive a curated list of verses that offer guidance and comfort.
 
 *   🎧 **Audio Recitations:** Listen to each verse with a single click. The audio feature offers an immersive way to experience the content, catering to auditory learners.
 
 *   ❤️ **Personal Favorites:** Bookmark any verse that resonates with you. All your saved verses are collected in a dedicated "Favorites" section for easy access.
 
 *   🔥 **Daily Visit Streak:** Stay motivated with a streak tracker that counts your consecutive daily visits, encouraging a consistent learning habit.
-
-*   🧘 **Mood-Based Recommendations:** Select your current mood (e.g., "Stressed," "Motivated") and receive a curated list of verses that provide relevant wisdom for your emotional state.
 
 *   📖 **Simple Explanations:** Go beyond the original text. A button reveals a short, clear explanation for each verse, making the ancient teachings accessible to a modern audience.
 
