@@ -1,11 +1,22 @@
+/* Global Resets - Ensures consistent cross-browser behavior */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base :root (Vite defaults) - Adjusted for clean white theme */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light; /* Force light color scheme */
+  /* Default colors for :root (clean white theme) */
+  color: #333333; /* Dark text for readability on white background */
+  background-color: #ffffff; /* Clean white page background */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,28 +24,54 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Base HTML and Body styles for full viewport coverage */
+html,
+body {
+  height: 100%; /* Make html and body take full viewport height */
+  width: 100%;  /* Make html and body take full viewport width */
+  overflow-x: hidden; /* Prevent horizontal scrollbars if content overflows */
+  min-width: 320px; /* Keep min-width for mobile responsiveness */
+  line-height: 1.5; /* Ensure line height consistency */
+  color: #333333; /* Default text color for body */
+  background-color: #ffffff; /* Clean white page background */
+}
+
+/* Ensure the root React element also takes full height and manages app layout */
+#root {
+  height: 100%;
+  width: 100%;
+  display: flex; /* Use flexbox to make the app container fill and structure children */
+  flex-direction: column; /* Stack children (Header, Main, Footer) vertically */
+  min-height: 100vh; /* Ensure it takes at least full viewport height */
+}
+
+/* Styling for the main content area to take available space */
+main {
+  flex: 1; /* This makes the <main> element expand to fill available vertical space */
+  padding: 20px; /* Add some padding around the main content */
+  background-color: #ffffff; /* A clean white background for content area */
+}
+
+/* Link styles - Adjusted for new light theme */
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: #B06500; /* Deep Terracotta/Rust for links */
+  text-decoration: none; /* Removed underline by default */
+  transition: color 0.2s ease-in-out;
 }
 a:hover {
-  color: #535bf2;
+  color: #FF6F00; /* Slightly brighter orange on hover */
+  text-decoration: underline; /* Add underline on hover */
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+/* Heading styles - Adjusted for new light theme */
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  color: #333333; /* Dark text for all headings */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Button styles - Adjusted for new light theme (general default, specific buttons will override) */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -42,27 +79,108 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #A38B00; /* Muted Gold/Olive as a general button background */
+  color: white; /* White text on buttons */
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.2s ease, color 0.2s ease;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #B06500; /* Terracotta border on hover */
+  background-color: #B06500; /* Terracotta background on hover */
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto #FF6F00; /* Saffron outline on focus */
 }
 
-@media (prefers-color-scheme: light) {
+/* Media query for dark color scheme - DISABLED to force light theme */
+/* 
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  }
+  html, body {
+      color: rgba(255, 255, 255, 0.87);
+      background-color: #242424;
+  }
+  #root {
+      background-color: #242424;
+  }
+  main {
+      background-color: #1A1A1A;
+  }
+  a {
+    color: #9A8C70;
   }
   a:hover {
-    color: #747bff;
+    color: #D4BE92;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #383838;
+    color: white;
+  }
+  button:hover {
+    background-color: #4C4C4C;
+    border-color: #9A8C70;
+  }
+  h1, h2, h3, h4, h5, h6 {
+      color: white;
   }
 }
+*/
+
+/* Force light theme regardless of system preference */
+:root {
+  color: #333333 !important;
+  background-color: #ffffff !important;
+}
+
+html, body {
+  color: #333333 !important;
+  background-color: #ffffff !important;
+}
+
+#root {
+  background-color: #ffffff !important;
+}
+
+main {
+  background-color: #ffffff !important;
+}
+
+
+/* Form Element Styling for consistency */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
+    padding: 10px;
+    border: 1px solid #FFDDBC; /* Soft border color for inputs */
+    border-radius: 5px;
+    font-size: 1em;
+    width: 100%;
+    max-width: 100%;
+    background-color: #FFFAEC; /* Very light background for inputs */
+    color: #333333; /* Dark text for input values */
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: #B06500; /* Terracotta border on focus */
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555555; /* Slightly darker grey for labels */
+}
+
+/* Specific component styles will override these general styles where needed */

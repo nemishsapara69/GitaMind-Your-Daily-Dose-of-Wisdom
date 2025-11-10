@@ -84,7 +84,7 @@ const MyOrdersPage = () => {
             </span>
           </h3>
           <p style={{ fontSize: '1.2em', color: '#6A1B9A', fontWeight: 'bold', marginBottom: '15px' }}>
-            Total: ${order.totalPrice.toFixed(2)}
+            Total: ₹{order.totalPrice.toFixed(2)}
             <span style={{ marginLeft: '20px', color: '#4CAF50' }}>Status: {order.orderStatus}</span>
           </p>
 
@@ -100,7 +100,7 @@ const MyOrdersPage = () => {
                 <Link to={`/products/${item.product}`} style={{ flexGrow: 1, textDecoration: 'none', color: '#424242' }}>
                   {item.name}
                 </Link>
-                <span style={{ color: '#757575' }}>{item.quantity} x ${item.price.toFixed(2)}</span>
+                <span style={{ color: '#757575' }}>{item.quantity} x ₹{item.price.toFixed(2)}</span>
               </div>
             ))}
           </div>

@@ -5,11 +5,14 @@ const cors = require('cors');
 
 // Import routes
 const chapterRoutes = require('./routes/chapterRoutes');
-const authRoutes = require('./routes/authRoutes'); // Assuming this path is correct, might be './routes/authRoutes'
+const authRoutes = require('./routes/authRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
-const orderRoutes = require('./routes/orderRoutes'); // <--- ADDED
+const orderRoutes = require('./routes/orderRoutes');
+const userRoutes = require('./routes/userRoutes');
+const searchRoutes = require('./routes/searchRoutes');
+const moodVerseRoutes = require('./routes/moodVerseRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,7 +44,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes); // <--- ADDED
+app.use('/api/orders', orderRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/mood-verses', moodVerseRoutes);
 
 // --- Start the Server ---
 app.listen(PORT, () => {

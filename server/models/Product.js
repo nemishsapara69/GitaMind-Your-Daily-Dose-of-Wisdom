@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Product name is required'],
         trim: true,
-        maxlength: [100, 'Product name cannot be more than 100 characters']
+        maxlength: [350, 'Product name cannot be more than 350 characters']
     },
     slug: { // For SEO-friendly URLs
         type: String,
@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
     description: {
         type: String,
         required: [true, 'Product description is required'],
-        maxlength: [1000, 'Description cannot be more than 1000 characters']
+        maxlength: [5000, 'Description cannot be more than 5000 characters']
     },
     price: {
         type: Number,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom'; // <--- ADDED 'Link' here
 import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
 
 const AdminOrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -15,7 +15,7 @@ const AdminOrdersPage = () => {
         setError('Not authorized. Admin access required.');
         setLoading(false);
         // Optionally redirect to login or a "not authorized" page
-        navigate('/login');
+        navigate('/login'); // Redirect if not admin
         return;
       }
 
@@ -95,6 +95,7 @@ const AdminOrdersPage = () => {
             border: '1px solid #e0e0e0',
             borderRadius: '8px',
             padding: '25px',
+            marginBottom: '30px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
           }}>
             <h3 style={{ fontSize: '1.8em', marginBottom: '10px', color: '#424242' }}>
@@ -104,7 +105,7 @@ const AdminOrdersPage = () => {
               </span>
             </h3>
             <p style={{ fontSize: '1.2em', color: '#6A1B9A', fontWeight: 'bold', marginBottom: '15px' }}>
-              Total: ${order.totalPrice.toFixed(2)}
+              Total: ₹{order.totalPrice.toFixed(2)}
               <span style={{ marginLeft: '20px', color: '#4CAF50' }}>Status: {order.orderStatus}</span>
               <span style={{ marginLeft: '20px', color: order.isPaid ? 'green' : 'red' }}>Paid: {order.isPaid ? 'Yes' : 'No'}</span>
               <span style={{ marginLeft: '20px', color: order.isDelivered ? 'green' : 'red' }}>Delivered: {order.isDelivered ? 'Yes' : 'No'}</span>
@@ -122,7 +123,7 @@ const AdminOrdersPage = () => {
                   <span style={{ flexGrow: 1, color: '#424242' }}>
                     {item.name}
                   </span>
-                  <span style={{ color: '#757575' }}>{item.quantity} x ${item.price.toFixed(2)}</span>
+                  <span style={{ color: '#757575' }}>{item.quantity} x ₹{item.price.toFixed(2)}</span>
                 </div>
               ))}
             </div>

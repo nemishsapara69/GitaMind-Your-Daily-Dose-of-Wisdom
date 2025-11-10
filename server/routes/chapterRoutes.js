@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Chapter = require('../models/chapter');
-const { protect, authorize } = require('../middleware/authMiddleware'); // Import middleware
+const Chapter = require('../models/Chapter'); // Ensure 'Chapter' is capitalized as per model file
+const { protect, authorize } = require('../middleware/authMiddleware'); // Keep imports, but 'protect' won't be used on the GET / route
 
-// GET all chapters - NOW PROTECTED
-router.get('/', protect, async (req, res) => {
+// GET all chapters - Now PUBLIC
+router.get('/', async (req, res) => { // <--- 'protect' MIDDLEWARE REMOVED HERE
     try {
-        const chapters = await Chapter.find().select('-verses.explanations');
+        const chapters = await Chapter.find().select('-verses.explanations'); // You might want to remove this .select() for public API
         res.json(chapters);
     } catch (error) {
         console.error('Error fetching chapters:', error);
@@ -14,7 +14,7 @@ router.get('/', protect, async (req, res) => {
     }
 });
 
-// GET a single chapter by chapter number (Public for now)
+// GET a single chapter by chapter number (Public)
 router.get('/:chapterNumber', async (req, res) => {
     try {
         const chapter = await Chapter.findOne({ chapter_number: req.params.chapterNumber });
@@ -28,7 +28,7 @@ router.get('/:chapterNumber', async (req, res) => {
     }
 });
 
-// GET a specific verse from a chapter (Public for now)
+// GET a specific verse from a chapter (Public)
 router.get('/:chapterNumber/verses/:verseNumber', async (req, res) => {
     try {
         const chapter = await Chapter.findOne({ chapter_number: req.params.chapterNumber });

@@ -145,7 +145,7 @@ const CartPage = () => {
               <Link to={`/products/${item.product.id}`} style={{ fontSize: '1.4em', fontWeight: 'bold', color: '#424242', textDecoration: 'none' }}>
                 {item.product.name}
               </Link>
-              <p style={{ fontSize: '1.1em', color: '#757575' }}>${item.price.toFixed(2)} each</p>
+              <p style={{ fontSize: '1.1em', color: '#757575' }}>₹{item.price.toFixed(2)} each</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <button
@@ -175,7 +175,7 @@ const CartPage = () => {
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '2px solid #e0e0e0', paddingTop: '20px', marginTop: '20px' }}>
-        <h3 style={{ fontSize: '1.8em', color: '#333' }}>Total: ${cart.totalPrice.toFixed(2)}</h3>
+        <h3 style={{ fontSize: '1.8em', color: '#333' }}>Total: ₹{cart.totalPrice.toFixed(2)}</h3>
         <div>
           <button
             onClick={handleClearCart}

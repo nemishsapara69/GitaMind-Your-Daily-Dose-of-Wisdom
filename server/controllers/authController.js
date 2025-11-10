@@ -1,5 +1,5 @@
 const User = require('../models/User'); // Import the User model
-const bcrypt = require('bcryptjs');      // For password hashing
+const bcrypt = require('bcryptjs');      // For password hashing - ENSURED THIS IS HERE
 const jwt = require('jsonwebtoken');     // For creating JWT tokens
 
 // @desc    Register a new user
@@ -9,22 +9,23 @@ exports.registerUser = async (req, res) => {
     const { fullName, username, email, password } = req.body;
 
     try {
-        // 1. Check if user already exists
+        // 1. Check if user already exists with this email
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({ message: 'User with this email already exists' });
         }
 
-        user = await User.findOne({ username });
+        // 2. Check if user already exists with this username
+        user = await User.findOne({ username }); // Re-assign user variable
         if (user) {
             return res.status(400).json({ message: 'User with this username already exists' });
         }
 
-        // 2. Hash the password
+        // 3. Hash the password
         const salt = await bcrypt.genSalt(10); // Generate a salt with 10 rounds
         const passwordHash = await bcrypt.hash(password, salt); // Hash the password
 
-        // 3. Create new user
+        // 4. Create new user
         user = new User({
             fullName,
             username,
@@ -36,7 +37,7 @@ exports.registerUser = async (req, res) => {
 
         await user.save(); // Save the user to the database
 
-        // 4. Generate JWT token
+        // 5. Generate JWT token
         const payload = {
             user: {
                 id: user.id, // Mongoose virtual 'id'
@@ -124,5 +125,40 @@ exports.loginUser = async (req, res) => {
     } catch (error) {
         console.error('Error during user login:', error.message);
         res.status(500).json({ message: 'Server error during login' });
+    }
+};
+
+// @desc    Change user's password
+// @route   PUT /api/auth/change-password
+// @access  Private
+exports.changePassword = async (req, res) => { // ADDED THIS FUNCTION
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+        // Find the user based on the ID from the authenticated token
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // 1. Check if the provided current password matches the stored hashed password
+        const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Current password is incorrect' });
+        }
+
+        // 2. Hash the new password before saving
+        const salt = await bcrypt.genSalt(10);
+        user.passwordHash = await bcrypt.hash(newPassword, salt);
+        user.lastLogin = new Date(); // Update last login as a side effect (optional, shows activity)
+
+        await user.save(); // Save the user document with the new hashed password
+
+        res.json({ message: 'Password changed successfully. Please log in again.' });
+
+    } catch (error) {
+        console.error('Error changing password:', error.message);
+        res.status(500).json({ message: 'Server error during password change' });
     }
 };

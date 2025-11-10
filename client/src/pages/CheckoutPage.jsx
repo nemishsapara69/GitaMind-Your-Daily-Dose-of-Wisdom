@@ -103,13 +103,13 @@ const CheckoutPage = () => {
         <h3 style={{ fontSize: '1.8em', color: '#424242', marginBottom: '15px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>Order Summary</h3>
         {cart.items.map(item => (
           <div key={item.product.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px dotted #eee' }}>
-            <span style={{ fontSize: '1.1em', color: '#555' }}>{item.product.name} ({item.quantity} x ${item.price.toFixed(2)})</span>
-            <span style={{ fontSize: '1.1em', fontWeight: 'bold', color: '#333' }}>${(item.quantity * item.price).toFixed(2)}</span>
+            <span style={{ fontSize: '1.1em', color: '#555' }}>{item.product.name} ({item.quantity} x ₹{item.price.toFixed(2)})</span>
+            <span style={{ fontSize: '1.1em', fontWeight: 'bold', color: '#333' }}>₹{(item.quantity * item.price).toFixed(2)}</span>
           </div>
         ))}
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0', marginTop: '10px', fontWeight: 'bold', fontSize: '1.3em', color: '#6A1B9A' }}>
           <span>Total Cart:</span>
-          <span>${cart.totalPrice.toFixed(2)}</span>
+          <span>₹{cart.totalPrice.toFixed(2)}</span>
         </div>
       </div>
 
