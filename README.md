@@ -45,21 +45,40 @@ To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
 
-Make sure you have Node.js and npm installed on your machine.
-*   npm
+Make sure you have the following installed on your machine:
+*   **Node.js** (v14 or higher)
+*   **npm** (comes with Node.js)
+*   **MongoDB** (local installation or MongoDB Atlas account)
+
+*   Install the latest npm:
     ```sh
     npm install npm@latest -g
     ```
+
+### Database Setup
+
+You have two options for the database:
+
+**Option 1: Local MongoDB**
+1. Install MongoDB locally on your machine
+2. Start MongoDB service
+3. Use connection string: `mongodb://localhost:27017/gitamind`
+
+**Option 2: MongoDB Atlas (Recommended)**
+1. Create a free account at [MongoDB Atlas](https://www.mongodb.com/atlas)
+2. Create a new cluster
+3. Get your connection string from Atlas
+4. Use the Atlas connection string in your `.env` file
 
 ### Installation
 
 1.  Clone the repo
     ```sh
-    git clone https://github.com/your_username/GitaMind.git
+    git clone https://github.com/nemishsapara69/GitaMind-Your-Daily-Dose-of-Wisdom.git
     ```
 2.  Navigate to the project directory
     ```sh
-    cd GitaMind
+    cd GitaMind-Your-Daily-Dose-of-Wisdom
     ```
 3.  Install server dependencies
     ```sh
@@ -71,16 +90,79 @@ Make sure you have Node.js and npm installed on your machine.
     cd ../client
     npm install
     ```
-5.  Create a `.env` file in the `server` directory and add your environment variables (e.g., `MONGO_URI`, `JWT_SECRET`).
+5.  Create a `.env` file in the `server` directory and add your environment variables:
+    ```sh
+    cd server
+    cp .env.example .env
+    ```
+    Then edit the `.env` file with your actual values:
+    - `MONGO_URI`: Your MongoDB connection string
+    - `JWT_SECRET`: A secure random string for JWT token signing
+    - `PORT`: Server port (default: 5000)
 
 ### Running the Application
 
 1.  Start the backend server (from the `/server` directory)
     ```sh
+    cd server
     npm run dev
     ```
 2.  Start the frontend React app (from the `/client` directory)
     ```sh
-    npm start
+    cd ../client
+    npm run dev
     ```
-3.  Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+3.  Open [http://localhost:5173](http://localhost:5173) to view it in the browser (Vite default port).
+
+## 🚀 Quick Start Guide
+
+After cloning the repository, follow these steps:
+
+```sh
+# Navigate to project directory
+cd GitaMind-Your-Daily-Dose-of-Wisdom
+
+# Install server dependencies
+cd server
+npm install
+
+# Setup environment variables
+cp .env.example .env
+# Edit .env file with your database URL and JWT secret
+
+# Install client dependencies
+cd ../client
+npm install
+
+# Start the application
+# Terminal 1: Start server (from server directory)
+cd server
+npm run dev
+
+# Terminal 2: Start client (from client directory) 
+cd client
+npm run dev
+```
+
+The application will be available at:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5000
+
+## 🔧 Environment Variables
+
+Create a `.env` file in the server directory with these variables:
+
+```env
+MONGO_URI=mongodb://localhost:27017/gitamind
+JWT_SECRET=your_very_secure_jwt_secret_here
+PORT=5000
+NODE_ENV=development
+```
+
+## 📝 Notes for Contributors
+
+- The backend server runs on port 5000 by default
+- The frontend development server (Vite) runs on port 5173
+- Make sure MongoDB is running before starting the backend
+- Use `npm run dev` for development (with hot reload)
+- Use `npm start` for production
