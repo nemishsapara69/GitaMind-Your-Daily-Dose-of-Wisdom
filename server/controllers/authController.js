@@ -177,7 +177,11 @@ exports.googleLogin = async (req, res) => {
 
     const googleClientId = process.env.GOOGLE_CLIENT_ID;
     if (!googleClientId) {
-        return res.status(500).json({ message: 'Google login is not configured on server' });
+        console.error('❌ GOOGLE_CLIENT_ID is not configured on server');
+        return res.status(500).json({ 
+            message: 'Server configuration error: Google login not configured',
+            details: 'GOOGLE_CLIENT_ID environment variable is missing'
+        });
     }
 
     let ticket;
@@ -187,7 +191,7 @@ exports.googleLogin = async (req, res) => {
             audience: googleClientId
         });
     } catch (error) {
-        console.error('Google token verification failed:', error.message);
+        console.error('❌ Google token verification failed:', error.message);
         return res.status(401).json({ message: 'Invalid Google credential' });
     }
 
@@ -198,6 +202,16 @@ exports.googleLogin = async (req, res) => {
         }
 
         const email = payload.email.toLowerCase();
+        
+        // Check database connection before querying
+        if (require('mongoose').connection.readyState !== 1) {
+            console.error('❌ Database connection lost during Google login');
+            return res.status(503).json({ 
+                message: 'Database connection failed. Please try again.',
+                details: 'MongoDB is not connected'
+            });
+        }
+
         let user = await User.findOne({ email });
 
         if (!user) {
@@ -221,7 +235,11 @@ exports.googleLogin = async (req, res) => {
 
         return sendAuthToken(user, res, 'Logged in with Google successfully');
     } catch (error) {
-        console.error('Error during Google login persistence:', error.message);
-        return res.status(500).json({ message: 'Google login failed' });
+        console.error('❌ Error during Google login persistence:', error.message);
+        console.error('Error details:', error);
+        return res.status(500).json({ 
+            message: 'Google login failed',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };

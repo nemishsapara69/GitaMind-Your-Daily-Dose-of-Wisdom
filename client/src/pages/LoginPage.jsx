@@ -11,6 +11,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const googleButtonRef = useRef(null);
+  const googleInitializedRef = useRef(false);
 
   const handleGoogleCredential = useCallback(async (response) => {
     if (!response?.credential) {
@@ -36,13 +37,22 @@ const LoginPage = () => {
       return;
     }
 
+    // Prevent multiple initializations
+    if (googleInitializedRef.current) {
+      return;
+    }
+
     const initGoogle = () => {
       if (!window.google || !googleButtonRef.current) return;
-
-      window.google.accounts.id.initialize({
-        client_id: googleClientId,
-        callback: handleGoogleCredential
-      });
+      
+      // Only initialize if not already done
+      if (!googleInitializedRef.current) {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleGoogleCredential
+        });
+        googleInitializedRef.current = true;
+      }
 
       googleButtonRef.current.innerHTML = '';
       window.google.accounts.id.renderButton(googleButtonRef.current, {
@@ -69,7 +79,7 @@ const LoginPage = () => {
       setMessage('Unable to load Google Sign-In. Check your internet and try again.');
     };
     document.body.appendChild(script);
-  }, [handleGoogleCredential]);
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();

@@ -1298,6 +1298,8 @@ const Chatbot = () => {
             {/* Input Field */}
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <input
+                id="chatbot-input"
+                name="chatbot-input"
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
