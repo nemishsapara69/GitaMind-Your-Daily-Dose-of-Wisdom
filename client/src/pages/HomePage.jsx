@@ -239,7 +239,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/4436/4436481.png" alt="Peace" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Peace">☮️</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'peace' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Peace</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'peace' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Find</p>
@@ -274,7 +274,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/2583/2583791.png" alt="Strength" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Strength">💪</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'strength' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Strength</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'strength' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Build</p>
@@ -309,7 +309,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/3094/3094837.png" alt="Wisdom" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Wisdom">🧠</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'wisdom' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Wisdom</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'wisdom' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Gain</p>
@@ -344,7 +344,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/1570/1570887.png" alt="Devotion" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Devotion">🙏</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'devotion' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Devotion</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'devotion' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Deepen</p>
@@ -379,7 +379,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/2916/2916139.png" alt="Clarity" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Clarity">🔍</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'clarity' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Clarity</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'clarity' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Remove</p>
@@ -414,7 +414,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="Love" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Love">❤️</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'love' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Love</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'love' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Cultivate</p>
@@ -449,7 +449,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/3094/3094840.png" alt="Focus" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Focus">🎯</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'focus' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Focus</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'focus' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Sharpen</p>
@@ -484,7 +484,7 @@ const HomePage = () => {
             }}
           >
             <div style={{ fontSize: '3em', marginBottom: '10px' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/3588/3588592.png" alt="Joy" style={{ width: '70px', height: '70px' }} />
+              <span role="img" aria-label="Joy">😊</span>
             </div>
             <h3 style={{ fontSize: '1.5em', color: selectedMood === 'joy' ? 'white' : '#B06500', marginBottom: '8px', fontWeight: 'bold' }}>Joy</h3>
             <p style={{ fontSize: '0.95em', color: selectedMood === 'joy' ? '#F5E6D3' : '#603900', marginBottom: '5px' }}>Celebrate</p>
