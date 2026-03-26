@@ -34,6 +34,14 @@ if (!MONGODB_URI) {
     console.error('   - Set MONGODB_URI in your environment variables');
     console.error('   - Local example: mongodb://localhost:27017/gitamind');
     console.error('   - Atlas example: mongodb+srv://username:password@cluster.mongodb.net/gitamind');
+} else {
+    try {
+        const [beforeAt, afterAt] = MONGODB_URI.split('@');
+        const safeUriInfo = afterAt || MONGODB_URI;
+        console.log('ℹ️ Using MongoDB connection (host/db):', safeUriInfo);
+    } catch {
+        console.log('ℹ️ Using MongoDB connection string');
+    }
 }
 
 if (!process.env.JWT_SECRET) {
