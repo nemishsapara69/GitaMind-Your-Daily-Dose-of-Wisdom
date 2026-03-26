@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Chapter = require('../models/Chapter');
+const Chapter = require('../models/chapter');
 
 // Search verses across all chapters
 router.get('/', async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Chapter = require('../models/Chapter'); // Ensure 'Chapter' is capitalized as per model file
+const Chapter = require('../models/chapter');
 const { protect, authorize } = require('../middleware/authMiddleware'); // Keep imports, but 'protect' won't be used on the GET / route
 
 // GET all chapters - Now PUBLIC

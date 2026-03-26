@@ -1,4 +1,4 @@
-const Chapter = require('../models/Chapter');
+const Chapter = require('../models/chapter');
 const Product = require('../models/Product');
 
 // @desc    Global search across chapters, verses, and products

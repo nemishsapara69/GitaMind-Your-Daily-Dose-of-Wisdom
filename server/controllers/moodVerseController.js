@@ -1,4 +1,4 @@
-const Chapter = require('../models/Chapter'); // We need Chapters to get verses
+const Chapter = require('../models/chapter'); // We need Chapters to get verses
 
 // A simple, hardcoded mapping of moods to verse numbers for demonstration
 // In a real application, this would be a more sophisticated AI/NLP model,
