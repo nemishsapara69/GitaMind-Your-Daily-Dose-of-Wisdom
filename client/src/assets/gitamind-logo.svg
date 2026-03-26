@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .background { fill: #d4a574; opacity: 0.6; }
+      .dark { fill: #2c3e50; }
+      .accent { fill: #c87941; }
+      .book-page { fill: #f5e6d3; }
+      .book-shadow { fill: #b8956a; }
+    </style>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="200" cy="200" r="180" class="background"/>
+  
+  <!-- Decorative dots around -->
+  <circle cx="80" cy="120" r="4" class="accent"/>
+  <circle cx="320" cy="120" r="4" class="accent"/>
+  <circle cx="60" cy="280" r="4" class="dark"/>
+  <circle cx="340" cy="280" r="4" class="dark"/>
+  
+  <!-- Arch/Dome shape at top -->
+  <path d="M 110 180 Q 110 100 200 100 Q 290 100 290 180 L 280 180 Q 280 110 200 110 Q 120 110 120 180 Z" class="dark"/>
+  
+  <!-- Left pillar decoration -->
+  <rect x="115" y="170" width="8" height="15" class="dark" rx="1"/>
+  <circle cx="119" cy="168" r="3" class="dark"/>
+  <line x1="119" y1="168" x2="119" y2="185" stroke="#2c3e50" stroke-width="2"/>
+  
+  <!-- Right pillar decoration -->
+  <rect x="277" y="170" width="8" height="15" class="dark" rx="1"/>
+  <circle cx="281" cy="168" r="3" class="dark"/>
+  <line x1="281" y1="168" x2="281" y2="185" stroke="#2c3e50" stroke-width="2"/>
+  
+  <!-- Open Book Base -->
+  <g transform="translate(200, 230)">
+    <!-- Left page -->
+    <path d="M -80 40 L -80 -30 Q -80 -40 -70 -45 Q -40 -55 0 -55 L 0 40 Z" class="book-page" stroke="#c87941" stroke-width="2"/>
+    <path d="M -80 40 L -80 -30 Q -80 -40 -70 -45 Q -40 -55 0 -55 L 0 40 Z" class="book-shadow" opacity="0.15"/>
+    
+    <!-- Right page -->
+    <path d="M 80 40 L 80 -30 Q 80 -40 70 -45 Q 40 -55 0 -55 L 0 40 Z" class="book-page" stroke="#c87941" stroke-width="2"/>
+    
+    <!-- Page curl shadows -->
+    <path d="M -70 -35 Q -60 -40 -50 -42" stroke="#b8956a" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <path d="M 70 -35 Q 60 -40 50 -42" stroke="#b8956a" stroke-width="1.5" fill="none" opacity="0.5"/>
+    
+    <!-- Center binding -->
+    <rect x="-2" y="-55" width="4" height="95" class="accent"/>
+  </g>
+  
+  <!-- Tree growing from book -->
+  <g transform="translate(200, 175)">
+    <!-- Trunk -->
+    <path d="M -3 0 L -4 30 L 4 30 L 3 0 Z" class="dark"/>
+    
+    <!-- Main branches -->
+    <path d="M 0 0 Q -15 -10 -20 -20 L -18 -22 Q -13 -12 0 -2 Z" class="dark"/>
+    <path d="M 0 0 Q 15 -10 20 -20 L 18 -22 Q 13 -12 0 -2 Z" class="dark"/>
+    
+    <!-- Center leaves/petals -->
+    <ellipse cx="0" cy="-30" rx="6" ry="14" class="dark"/>
+    <ellipse cx="0" cy="-30" rx="4" ry="12" class="dark" opacity="0.7"/>
+    
+    <!-- Left leaves -->
+    <ellipse cx="-12" cy="-22" rx="5" ry="11" class="dark" transform="rotate(-25 -12 -22)"/>
+    <ellipse cx="-18" cy="-15" rx="4" ry="9" class="dark" transform="rotate(-35 -18 -15)"/>
+    <ellipse cx="-22" cy="-8" rx="4" ry="8" class="dark" transform="rotate(-45 -22 -8)"/>
+    
+    <!-- Right leaves -->
+    <ellipse cx="12" cy="-22" rx="5" ry="11" class="dark" transform="rotate(25 12 -22)"/>
+    <ellipse cx="18" cy="-15" rx="4" ry="9" class="dark" transform="rotate(35 18 -15)"/>
+    <ellipse cx="22" cy="-8" rx="4" ry="8" class="dark" transform="rotate(45 22 -8)"/>
+    
+    <!-- Inner smaller leaves -->
+    <ellipse cx="-8" cy="-26" rx="3" ry="8" class="dark" transform="rotate(-15 -8 -26)"/>
+    <ellipse cx="8" cy="-26" rx="3" ry="8" class="dark" transform="rotate(15 8 -26)"/>
+    
+    <!-- Decorative small leaves on sides -->
+    <ellipse cx="-25" cy="-2" rx="3" ry="6" class="dark" transform="rotate(-50 -25 -2)"/>
+    <ellipse cx="25" cy="-2" rx="3" ry="6" class="dark" transform="rotate(50 25 -2)"/>
+  </g>
+  
+  <!-- Decorative book stand/pages at bottom -->
+  <path d="M 140 270 Q 145 275 150 278 L 145 280 Q 142 278 140 275 Z" class="accent"/>
+  <path d="M 260 270 Q 255 275 250 278 L 255 280 Q 258 278 260 275 Z" class="accent"/>
+  
+</svg>

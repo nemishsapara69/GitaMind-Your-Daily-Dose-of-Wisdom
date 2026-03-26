@@ -1,4 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { logError } from '../utils/logger';
 
 // Create the context
 const AuthContext = createContext(null);
@@ -6,6 +9,7 @@ const AuthContext = createContext(null);
 // Create a provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Holds logged-in user data
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
   useEffect(() => {
     // Load user from localStorage on initial render
@@ -14,10 +18,11 @@ export const AuthProvider = ({ children }) => {
       try {
         setUser(JSON.parse(storedUser));
       } catch (e) {
-        console.error("Failed to parse user from localStorage", e);
+        logError("Failed to parse user from localStorage", e);
         localStorage.removeItem('user'); // Clear corrupted data
       }
     }
+    setIsLoading(false); // Done loading
   }, []);
 
   // Function to handle login
@@ -40,6 +45,10 @@ export const AuthProvider = ({ children }) => {
     // Helper to check if user has a specific role (e.g., isAdmin)
     isAdmin: user && user.user.roles.includes('admin')
   };
+
+  if (isLoading) {
+    return <LoadingSpinner message="Loading Gitamind..." size="large" />;
+  }
 
   return (
     <AuthContext.Provider value={authContextValue}>

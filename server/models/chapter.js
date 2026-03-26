@@ -34,4 +34,4 @@ const chapterSchema = new mongoose.Schema({
     timestamps: true // Adds createdAt and updatedAt timestamps
 });
 
-module.exports = mongoose.model('Chapter', chapterSchema);
+module.exports = mongoose.models.Chapter || mongoose.model('Chapter', chapterSchema);

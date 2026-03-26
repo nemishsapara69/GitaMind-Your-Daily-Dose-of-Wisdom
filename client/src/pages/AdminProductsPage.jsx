@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const AdminProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     if (!user || !isAdmin) {
       setError('Not authorized. Admin access required.');
       setLoading(false);
@@ -32,11 +31,11 @@ const AdminProductsPage = () => {
       setError(err.response?.data?.message || 'Failed to fetch products.');
       setLoading(false);
     }
-  };
+  }, [user, isAdmin]);
 
   useEffect(() => {
     fetchProducts();
-  }, [user, isAdmin, navigate]);
+  }, [fetchProducts]);
 
   const handleDeleteProduct = async (productId) => {
     if (!window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {

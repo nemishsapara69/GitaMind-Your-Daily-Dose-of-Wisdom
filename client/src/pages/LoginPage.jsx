@@ -1,25 +1,85 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { useAuth } from '../context/AuthContext'; // ADDED: Import useAuth
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('gitamind.admin@example.com'); // Pre-fill for convenience
-  const [password, setPassword] = useState('MySecretPassword123!'); // Pre-fill for convenience
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [googleReady, setGoogleReady] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth(); // ADDED: Use the login function from AuthContext
+  const { login } = useAuth();
+  const googleButtonRef = useRef(null);
+
+  const handleGoogleCredential = useCallback(async (response) => {
+    if (!response?.credential) {
+      setMessage('Google sign-in failed. Please try again.');
+      return;
+    }
+
+    try {
+      const res = await api.post('/auth/google', { credential: response.credential });
+      login(res.data);
+      setMessage('Google login successful!');
+      navigate('/');
+    } catch (err) {
+      setMessage(err.response?.data?.message || 'Google login failed. Please try again.');
+      console.error('Google login error:', err.response?.data || err);
+    }
+  }, [login, navigate]);
+
+  useEffect(() => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (!googleClientId || googleClientId.includes('your_google_web_client_id')) {
+      setGoogleReady(false);
+      return;
+    }
+
+    const initGoogle = () => {
+      if (!window.google || !googleButtonRef.current) return;
+
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: handleGoogleCredential
+      });
+
+      googleButtonRef.current.innerHTML = '';
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
+        theme: 'outline',
+        size: 'large',
+        text: 'continue_with',
+        shape: 'pill',
+        width: 280
+      });
+      setGoogleReady(true);
+    };
+
+    if (window.google) {
+      initGoogle();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = initGoogle;
+    script.onerror = () => {
+      setMessage('Unable to load Google Sign-In. Check your internet and try again.');
+    };
+    document.body.appendChild(script);
+  }, [handleGoogleCredential]);
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     try {
       const res = await api.post('/auth/login', { email, password });
-      login(res.data); // MODIFIED: Call the context's login function
+      login(res.data);
       setMessage('Login successful!');
       console.log('Logged in user:', res.data);
-      navigate('/'); // Redirect to the home page after successful login
+      navigate('/');
     } catch (err) {
-      // Display error message from backend or a generic one
       setMessage(err.response?.data?.message || 'Login failed. Please check credentials.');
       console.error('Login error:', err.response?.data || err);
     }
@@ -28,7 +88,6 @@ const LoginPage = () => {
   return (
     <div>
       <h2>Login</h2>
-      {/* Display login message */}
       {message && <p style={{ color: message.includes('successful') ? 'green' : 'red' }}>{message}</p>}
       <form onSubmit={handleLogin}>
         <div>
@@ -53,6 +112,16 @@ const LoginPage = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+
+      <div style={{ marginTop: '20px' }}>
+        <p>Or continue with Google</p>
+        <div ref={googleButtonRef} />
+        {!googleReady && (
+          <small style={{ color: '#666' }}>
+            Add VITE_GOOGLE_CLIENT_ID in client env to enable Google button.
+          </small>
+        )}
+      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import gitamindLogo from '../assets/gitamind-logo.svg';
 
 // SVG Icon for Search
 const SearchSVG = ({ color = "#B06500", size = "1.2em" }) => (
@@ -43,6 +44,7 @@ const Header = () => {
   const chaptersDropdownRef = useRef(null);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // --- Fetch Chapters on Header Mount ---
   useEffect(() => {
@@ -201,26 +203,70 @@ const Header = () => {
   return (
     <header style={{
       display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      flexDirection: 'column',
       padding: '12px 25px',
       background: '#FFF5DF',
       color: '#444444',
-      boxShadow: '0 2px 8px rgba(0,0/0,0.1)',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
       position: 'relative',
       zIndex: 100,
-      flexWrap: 'wrap',
       gap: '15px',
       borderBottom: '1px solid #FFDDBC'
     }}>
-      <div className="logo" style={{ flexShrink: 0, marginRight: 'auto' }}>
-        <Link to="/" style={{ color: '#B06500', textDecoration: 'none', fontSize: '28px', fontWeight: 'bold' }}>
-          Gitamind
-        </Link>
-      </div>
+      {/* Top Row: Logo and Navigation */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+        <div className="logo" style={{ flexShrink: 0 }}>
+          <Link to="/" style={{ 
+            textDecoration: 'none', 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '10px'
+          }}>
+            <img 
+              src={gitamindLogo} 
+              alt="Gitamind Logo" 
+              style={{ 
+                height: '50px', 
+                width: '50px',
+                objectFit: 'contain',
+                verticalAlign: 'middle'
+              }} 
+            />
+            <span style={{ 
+              color: '#B06500', 
+              fontSize: '28px', 
+              fontWeight: 'bold',
+              verticalAlign: 'middle',
+              display: 'inline-block'
+            }}>
+              Gitamind
+            </span>
+          </Link>
+        </div>
 
-      {/* Navigation links first, then profile/logout, then search */}
-      <nav style={{ order: 2, marginLeft: 'auto' }}>
+        {/* Hamburger Menu Button (Mobile Only) */}
+        <button 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          style={{
+            display: 'none',
+            marginLeft: 'auto',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '8px',
+            zIndex: 102
+          }}
+          className="mobile-menu-button"
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <span style={{ width: '25px', height: '3px', backgroundColor: '#B06500', display: 'block', transition: 'all 0.3s' }}></span>
+            <span style={{ width: '25px', height: '3px', backgroundColor: '#B06500', display: 'block', transition: 'all 0.3s' }}></span>
+            <span style={{ width: '25px', height: '3px', backgroundColor: '#B06500', display: 'block', transition: 'all 0.3s' }}></span>
+          </div>
+        </button>
+
+        {/* Navigation links */}
+        <nav style={{ marginLeft: 'auto' }} className="desktop-nav">
         <ul style={{
             listStyle: 'none',
             margin: 0,
@@ -394,44 +440,192 @@ const Header = () => {
               )}
             </ul>
           </nav>
+        </div>
 
-          {/* Search Bar - Positioned last for desired order */}
-          <div style={{ order: 4, flexShrink: 0, marginLeft: '20px', minWidth: '150px', maxWidth: '300px' }}>
-            <form onSubmit={handleSearchSubmit} style={{ position: 'relative', width: '100%' }}>
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+        {/* Bottom Row: Centered Search Bar */}
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <form onSubmit={handleSearchSubmit} style={{ position: 'relative', width: '100%', maxWidth: '500px' }}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px 15px 10px 40px',
+                borderRadius: '25px',
+                border: '1px solid #FFDDBC',
+                backgroundColor: '#FFFAEC',
+                color: '#444444',
+                fontSize: '1em',
+                outline: 'none',
+                boxSizing: 'border-box',
+                '::placeholder': { color: '#888888' }
+              }}
+            />
+            <button type="submit" style={{
+              position: 'absolute',
+              left: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              color: '#B06500',
+              cursor: 'pointer',
+              fontSize: '1.2em',
+              padding: '0'
+            }}>
+              <SearchSVG color="#B06500" size="1.2em" />
+            </button>
+          </form>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <>
+            <div 
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                zIndex: 100,
+                display: 'none'
+              }}
+              className="mobile-overlay"
+            />
+            <div 
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: '280px',
+                backgroundColor: '#FFF5DF',
+                boxShadow: '-2px 0 10px rgba(0,0,0,0.2)',
+                zIndex: 101,
+                overflowY: 'auto',
+                padding: '80px 20px 20px',
+                display: 'none'
+              }}
+              className="mobile-menu"
+            >
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
                 style={{
-                  width: '100%',
-                  padding: '8px 15px 8px 35px',
-                  borderRadius: '20px',
-                  border: '1px solid #FFDDBC',
-                  backgroundColor: '#FFFAEC',
-                  color: '#444444',
-                  fontSize: '0.95em',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                  '::placeholder': { color: '#888888' }
+                  position: 'absolute',
+                  top: '20px',
+                  right: '20px',
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '30px',
+                  color: '#B06500',
+                  cursor: 'pointer',
+                  padding: '0',
+                  lineHeight: '1'
                 }}
-              />
-              <button type="submit" style={{
-                position: 'absolute',
-                left: '8px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                color: '#B06500',
-                cursor: 'pointer',
-                fontSize: '1.0em',
-                padding: '0'
-              }}>
-                <SearchSVG color="#B06500" size="1.0em" />
+              >
+                ×
               </button>
-            </form>
-          </div>
+              
+              <nav>
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+                  <li style={{ marginBottom: '10px' }}>
+                    <button
+                      onClick={() => { toggleChaptersDropdown(); }}
+                      style={{
+                        ...navItemBaseStyle,
+                        width: '100%',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      Chapters <DropdownArrowSVG />
+                    </button>
+                  </li>
+                  <li style={{ marginBottom: '10px' }}>
+                    <Link to="/products" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                      Products
+                    </Link>
+                  </li>
+                  {user && !isAdmin && (
+                    <>
+                      <li style={{ marginBottom: '10px' }}>
+                        <Link to="/cart" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                          Cart
+                        </Link>
+                      </li>
+                      <li style={{ marginBottom: '10px' }}>
+                        <Link to="/myorders" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                          My Orders
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  {user && isAdmin && (
+                    <>
+                      <li style={{ marginBottom: '10px' }}>
+                        <Link to="/admin/orders" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                          User Orders
+                        </Link>
+                      </li>
+                      <li style={{ marginBottom: '10px' }}>
+                        <Link to="/admin/products" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                          Manage Products
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  {user ? (
+                    <>
+                      <li style={{ marginBottom: '10px' }}>
+                        <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                          {isAdmin ? 'Admin' : 'Profile'}
+                        </Link>
+                      </li>
+                      <li style={{ marginBottom: '10px' }}>
+                        <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} style={{ ...navItemBaseStyle, width: '100%', background: '#B06500', color: 'white' }}>
+                          Logout
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li style={{ marginBottom: '10px' }}>
+                        <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                          Login
+                        </Link>
+                      </li>
+                      <li style={{ marginBottom: '10px' }}>
+                        <Link to="/register" onClick={() => setIsMobileMenuOpen(false)} style={{ ...navItemBaseStyle, width: '100%', display: 'block' }}>
+                          Register
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </nav>
+            </div>
+          </>
+        )}
+
+        {/* Responsive CSS */}
+        <style>{`
+          @media (max-width: 768px) {
+            .desktop-nav {
+              display: none !important;
+            }
+            .mobile-menu-button {
+              display: block !important;
+            }
+            .mobile-overlay,
+            .mobile-menu {
+              display: block !important;
+            }
+          }
+        `}</style>
         </header>
       );
     };

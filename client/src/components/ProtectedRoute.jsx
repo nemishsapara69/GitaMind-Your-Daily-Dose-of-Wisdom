@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Import your AuthContext
 
 const ProtectedRoute = ({ children, requiredRoles }) => {
-  const { user, loading } = useAuth(); // Get user and loading state from context
+  const { user } = useAuth(); // Get user from context
 
   // If auth context is still loading user from localStorage, show a loading indicator
   // (This assumes your AuthProvider has a 'loading' state if you fetch user from backend)

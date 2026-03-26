@@ -8,6 +8,8 @@ const ChapterDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState('english');
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [currentSpeakingVerse, setCurrentSpeakingVerse] = useState(null);
   const verseRefs = useRef({});
 
   useEffect(() => {
@@ -25,6 +27,121 @@ const ChapterDetailPage = () => {
 
     fetchChapter();
   }, [chapterNumber]);
+
+  // Text-to-Speech function
+  const speakVerse = (verse) => {
+    if (!('speechSynthesis' in window)) {
+      alert('Text-to-Speech is not supported in your browser.');
+      return;
+    }
+
+    // If already speaking this verse, stop
+    if (isSpeaking && currentSpeakingVerse === verse.verse_number) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setCurrentSpeakingVerse(null);
+      return;
+    }
+
+    // Stop any ongoing speech
+    window.speechSynthesis.cancel();
+
+    // Build text to speak
+    let textToSpeak = `Verse ${chapter.chapter_number} point ${verse.verse_number}. `;
+    
+    // Add Sanskrit
+    if (verse.sanskrit) {
+      textToSpeak += `Sanskrit: ${verse.sanskrit}. `;
+    }
+    
+    // Add Transliteration
+    if (verse.transliteration) {
+      textToSpeak += `Transliteration: ${verse.transliteration}. `;
+    }
+    
+    // Add Translation
+    if (verse.translations && verse.translations[selectedLanguage]) {
+      textToSpeak += `Translation: ${verse.translations[selectedLanguage]}. `;
+    }
+    
+    // Add Explanation
+    if (verse.explanations && verse.explanations[selectedLanguage]) {
+      textToSpeak += `Explanation: ${verse.explanations[selectedLanguage]}`;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'en-US';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      setCurrentSpeakingVerse(verse.verse_number);
+    };
+
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setCurrentSpeakingVerse(null);
+    };
+
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      setCurrentSpeakingVerse(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Speak full chapter summary
+  const speakChapterSummary = () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Text-to-Speech is not supported in your browser.');
+      return;
+    }
+
+    // If already speaking, stop
+    if (isSpeaking && currentSpeakingVerse === 'summary') {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setCurrentSpeakingVerse(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const textToSpeak = `Chapter ${chapter.chapter_number}: ${chapter.title.english}. ${chapter.summary.english}`;
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'en-US';
+    utterance.rate = 1.0;
+
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      setCurrentSpeakingVerse('summary');
+    };
+
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setCurrentSpeakingVerse(null);
+    };
+
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      setCurrentSpeakingVerse(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Stop all speech on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (chapter && verseNumber && verseRefs.current[verseNumber]) {
@@ -66,9 +183,44 @@ const ChapterDetailPage = () => {
       <h2 style={{ textAlign: 'center', marginBottom: '10px', fontSize: '2.8em', color: '#B06500' }}>
         Chapter {chapter.chapter_number}: {chapter.title.english}
       </h2>
-      <p style={{ textAlign: 'center', fontSize: '1.2em', color: '#603900', lineHeight: '1.6', marginBottom: '30px', maxWidth: '800px', margin: '0 auto' }}>
+      <p style={{ textAlign: 'center', fontSize: '1.2em', color: '#603900', lineHeight: '1.6', marginBottom: '20px', maxWidth: '800px', margin: '0 auto 20px auto' }}>
         {chapter.summary.english}
       </p>
+      
+      {/* Listen to Summary Button */}
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <button
+          onClick={speakChapterSummary}
+          style={{
+            padding: '12px 30px',
+            backgroundColor: isSpeaking && currentSpeakingVerse === 'summary' ? '#DC3545' : '#C19A6B',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            fontWeight: '600',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '10px',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.25)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+          }}
+        >
+          <span style={{ fontSize: '20px' }}>
+            {isSpeaking && currentSpeakingVerse === 'summary' ? '⏸️' : '🔊'}
+          </span>
+          <span>{isSpeaking && currentSpeakingVerse === 'summary' ? 'Stop Summary' : 'Listen to Summary'}</span>
+        </button>
+      </div>
 
       <div style={{ marginBottom: '30px', textAlign: 'center' }}>
         <label htmlFor="language-select" style={{ marginRight: '10px', fontSize: '1.1em', color: '#603900', fontWeight: 'bold' }}>View in:</label>
@@ -108,8 +260,39 @@ const ChapterDetailPage = () => {
             transition: 'background-color 0.3s ease-in-out',
             textAlign: 'left' // Ensure text aligns left
           }}>
-          <h4 style={{ fontSize: '1.6em', marginBottom: '15px', color: '#B06500' }}>
-            Verse {chapter.chapter_number}.{verse.verse_number}
+          <h4 style={{ fontSize: '1.6em', marginBottom: '15px', color: '#B06500', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span>Verse {chapter.chapter_number}.{verse.verse_number}</span>
+            <button
+              onClick={() => speakVerse(verse)}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: isSpeaking && currentSpeakingVerse === verse.verse_number ? '#DC3545' : '#C19A6B',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+                }}
+              >
+                <span style={{ fontSize: '18px' }}>
+                {isSpeaking && currentSpeakingVerse === verse.verse_number ? '⏸️' : '🔊'}
+              </span>
+              <span>{isSpeaking && currentSpeakingVerse === verse.verse_number ? 'Stop' : 'Listen'}</span>
+            </button>
           </h4>
           <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.1em', color: '#333333', marginBottom: '10px' }}>
             <strong style={{ color: '#603900' }}>Sanskrit:</strong> {verse.sanskrit}

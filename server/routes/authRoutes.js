@@ -5,5 +5,6 @@ const authController = require('../controllers/authController'); // Import the c
 // Public Routes
 router.post('/register', authController.registerUser); // Route for user signup
 router.post('/login', authController.loginUser);     // Route for user login
+router.post('/google', authController.googleLogin);  // Route for Google Sign-In
 
 module.exports = router;

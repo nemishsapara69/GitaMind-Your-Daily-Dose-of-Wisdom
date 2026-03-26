@@ -18,12 +18,21 @@ import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProductForm from './components/ProductForm';
+import Chatbot from './components/Chatbot';
+import NotFoundPage from './pages/NotFoundPage';
+import LandingPage from './pages/LandingPage';
+import FirstVisitRedirect from './components/FirstVisitRedirect';
 
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
+    <>
+      <FirstVisitRedirect>
+        <Routes>
+        {/* Landing Page - No Layout */}
+        <Route path="/welcome" element={<LandingPage />} />
+        
+        <Route path="/" element={<Layout />}>
         {/* Public Routes */}
         <Route index element={<HomePage />} />
         <Route path="login" element={<LoginPage />} />
@@ -53,9 +62,14 @@ function App() {
 
 
         {/* Fallback for unknown routes */}
-        <Route path="*" element={<h2 style={{ textAlign: 'center', padding: '50px', color: 'red' }}>404 - Page Not Found</h2>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
+    
+    {/* Chatbot - Available on all pages */}
+    <Chatbot />
+      </FirstVisitRedirect>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // <--- ADDED 'Link' here
 import api from '../services/api';
 
@@ -8,7 +8,7 @@ const AdminOrdersPage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const fetchAllOrders = async () => {
+  const fetchAllOrders = useCallback(async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user || !user.token || !user.user.roles.includes('admin')) {
@@ -32,11 +32,11 @@ const AdminOrdersPage = () => {
       setError(err.response?.data?.message || 'Failed to fetch all orders.');
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchAllOrders();
-  }, [navigate]); // navigate dependency for potential redirect
+  }, [fetchAllOrders]);
 
   // Functions to update order status (e.g., mark as paid/delivered)
   const handleUpdateOrderStatus = async (orderId, statusType) => {

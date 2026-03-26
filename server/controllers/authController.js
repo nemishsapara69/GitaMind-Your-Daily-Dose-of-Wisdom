@@ -1,6 +1,60 @@
 const User = require('../models/User'); // Import the User model
 const bcrypt = require('bcryptjs');      // For password hashing - ENSURED THIS IS HERE
 const jwt = require('jsonwebtoken');     // For creating JWT tokens
+const { OAuth2Client } = require('google-auth-library');
+
+const googleClient = new OAuth2Client();
+
+const createAuthResponse = (user, message) => ({
+    message,
+    user: {
+        id: user.id,
+        fullName: user.fullName,
+        username: user.username,
+        email: user.email,
+        roles: user.roles
+    }
+});
+
+const sendAuthToken = (user, res, message, statusCode = 200) => {
+    const payload = {
+        user: {
+            id: user.id,
+            roles: user.roles
+        }
+    };
+
+    jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' },
+        (err, token) => {
+            if (err) throw err;
+            return res.status(statusCode).json({
+                ...createAuthResponse(user, message),
+                token
+            });
+        }
+    );
+};
+
+const buildUniqueUsername = async (email, fullName) => {
+    const rawBase = (fullName || email.split('@')[0] || 'user')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '')
+        .slice(0, 16);
+
+    const base = rawBase || 'user';
+    let candidate = base;
+    let suffix = 1;
+
+    while (await User.findOne({ username: candidate })) {
+        candidate = `${base}${suffix}`;
+        suffix += 1;
+    }
+
+    return candidate;
+};
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -37,33 +91,7 @@ exports.registerUser = async (req, res) => {
 
         await user.save(); // Save the user to the database
 
-        // 5. Generate JWT token
-        const payload = {
-            user: {
-                id: user.id, // Mongoose virtual 'id'
-                roles: user.roles
-            }
-        };
-
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET, // Your secret from .env
-            { expiresIn: '1h' },    // Token expires in 1 hour
-            (err, token) => {
-                if (err) throw err;
-                res.status(201).json({
-                    message: 'User registered successfully',
-                    token,
-                    user: {
-                        id: user.id,
-                        fullName: user.fullName,
-                        username: user.username,
-                        email: user.email,
-                        roles: user.roles
-                    }
-                });
-            }
-        );
+        return sendAuthToken(user, res, 'User registered successfully', 201);
 
     } catch (error) {
         console.error('Error during user registration:', error.message);
@@ -94,33 +122,7 @@ exports.loginUser = async (req, res) => {
         user.lastLogin = new Date();
         await user.save(); // Save the updated user
 
-        // 4. Generate JWT token
-        const payload = {
-            user: {
-                id: user.id,
-                roles: user.roles
-            }
-        };
-
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' },
-            (err, token) => {
-                if (err) throw err;
-                res.json({
-                    message: 'Logged in successfully',
-                    token,
-                    user: {
-                        id: user.id,
-                        fullName: user.fullName,
-                        username: user.username,
-                        email: user.email,
-                        roles: user.roles
-                    }
-                });
-            }
-        );
+        return sendAuthToken(user, res, 'Logged in successfully');
 
     } catch (error) {
         console.error('Error during user login:', error.message);
@@ -160,5 +162,66 @@ exports.changePassword = async (req, res) => { // ADDED THIS FUNCTION
     } catch (error) {
         console.error('Error changing password:', error.message);
         res.status(500).json({ message: 'Server error during password change' });
+    }
+};
+
+// @desc    Authenticate user with Google
+// @route   POST /api/auth/google
+// @access  Public
+exports.googleLogin = async (req, res) => {
+    const { credential } = req.body;
+
+    if (!credential) {
+        return res.status(400).json({ message: 'Google credential is required' });
+    }
+
+    const googleClientId = process.env.GOOGLE_CLIENT_ID;
+    if (!googleClientId) {
+        return res.status(500).json({ message: 'Google login is not configured on server' });
+    }
+
+    let ticket;
+    try {
+        ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: googleClientId
+        });
+    } catch (error) {
+        console.error('Google token verification failed:', error.message);
+        return res.status(401).json({ message: 'Invalid Google credential' });
+    }
+
+    try {
+        const payload = ticket.getPayload();
+        if (!payload || !payload.email || !payload.email_verified) {
+            return res.status(400).json({ message: 'Invalid Google account payload' });
+        }
+
+        const email = payload.email.toLowerCase();
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            const username = await buildUniqueUsername(email, payload.name);
+            const passwordHash = await bcrypt.hash(`google_oauth_${Date.now()}`, 10);
+
+            user = new User({
+                fullName: payload.name || email.split('@')[0],
+                username,
+                email,
+                passwordHash,
+                dateCreated: new Date(),
+                roles: ['user']
+            });
+
+            await user.save();
+        }
+
+        user.lastLogin = new Date();
+        await user.save();
+
+        return sendAuthToken(user, res, 'Logged in with Google successfully');
+    } catch (error) {
+        console.error('Error during Google login persistence:', error.message);
+        return res.status(500).json({ message: 'Google login failed' });
     }
 };

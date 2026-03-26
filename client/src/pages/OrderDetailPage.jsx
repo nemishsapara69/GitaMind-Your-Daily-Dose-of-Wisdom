@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -9,7 +9,7 @@ const OrderDetailPage = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
 
-  const fetchOrderDetails = async () => {
+  const fetchOrderDetails = useCallback(async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user || !user.token) {
@@ -33,11 +33,11 @@ const OrderDetailPage = () => {
       setError(err.response?.data?.message || 'Failed to fetch order details.');
       setLoading(false);
     }
-  };
+  }, [orderId, navigate]);
 
   useEffect(() => {
     fetchOrderDetails();
-  }, [orderId, navigate]);
+  }, [fetchOrderDetails]);
 
   // Function to update order status (admin only)
   const handleUpdateOrderStatus = async (statusType) => {
