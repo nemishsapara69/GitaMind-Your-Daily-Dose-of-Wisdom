@@ -62,12 +62,24 @@ const corsOptions = {
         ];
         
         // Allow requests with no origin (like mobile apps or Postman)
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            console.log('Blocked by CORS:', origin);
-            callback(new Error('Not allowed by CORS'));
+        if (!origin) {
+            return callback(null, true);
         }
+
+        try {
+            const hostname = new URL(origin).hostname;
+            const isKnownOrigin = allowedOrigins.indexOf(origin) !== -1;
+            const isVercelApp = hostname.endsWith('vercel.app');
+
+            if (isKnownOrigin || isVercelApp) {
+                return callback(null, true);
+            }
+        } catch (e) {
+            console.log('CORS origin parse error, origin:', origin, 'error:', e.message);
+        }
+
+        console.log('Blocked by CORS:', origin);
+        callback(new Error('Not allowed by CORS'));
     },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
